@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Assets.Scripts
+﻿namespace Assets.Scripts
 {
     public class AntScript
     {
@@ -22,7 +17,27 @@ namespace Assets.Scripts
             
         }
 
+        public void EnterView(Sugar sugar)
+        {
+
+        }
+
         public void ExitView(Ant ant)
+        {
+            
+        }
+
+        public void ExitView(Sugar sugar)
+        {
+
+        }
+
+        public void Reach(Sugar sugar)
+        {
+            
+        }
+
+        public void Leave(Sugar sugar)
         {
             
         }

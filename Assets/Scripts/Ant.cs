@@ -27,6 +27,11 @@ namespace Assets.Scripts
                 {
                     _antScript.EnterView(ant);
                 }
+                var sugar = other.gameObject.GetComponentInParent<Sugar>();
+                if (sugar != null)
+                {
+                    _antScript.EnterView(sugar);
+                }
             }
         }
 
@@ -39,6 +44,29 @@ namespace Assets.Scripts
                 {
                     _antScript.ExitView(ant);
                 }
+                var sugar = other.gameObject.GetComponentInParent<Sugar>();
+                if (sugar != null)
+                {
+                    _antScript.ExitView(sugar);
+                }
+            }
+        }
+
+        protected virtual void OnCollisionEnter(Collision collision)
+        {
+            var sugar = collision.gameObject.GetComponentInParent<Sugar>();
+            if (sugar != null)
+            {
+                _antScript.Reach(sugar);
+            }
+        }
+
+        protected virtual void OnCollisionExit(Collision collision)
+        {
+            var sugar = collision.gameObject.GetComponentInParent<Sugar>();
+            if (sugar != null)
+            {
+                _antScript.Leave(sugar);
             }
         }
     }

@@ -11,6 +11,8 @@ namespace Assets.Scripts
         public Transform AntContainer;
         public string LevelScene;
 
+        private int _antNumber;
+
         protected virtual void Start()
         {
             StartCoroutine(LoadLevel());
@@ -22,6 +24,7 @@ namespace Assets.Scripts
             obj.transform.parent = AntContainer;
             obj.transform.position = position;
             obj.transform.rotation = rotation;
+            obj.name = string.Format("ant {0}", _antNumber++);
         }
 
         private void SpawnAnts(Vector3 center)

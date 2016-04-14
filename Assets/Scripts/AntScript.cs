@@ -37,9 +37,19 @@
             
         }
 
+        public void Reach(Apple apple)
+        {
+
+        }
+
         public void Leave(Sugar sugar)
         {
             
+        }
+
+        public void Leave(Apple apple)
+        {
+
         }
     }
 }

@@ -59,6 +59,11 @@ namespace Assets.Scripts
             {
                 _antScript.Reach(sugar);
             }
+            var apple = collision.gameObject.GetComponentInParent<Apple>();
+            if (apple != null)
+            {
+                _antScript.Reach(apple);
+            }
         }
 
         protected virtual void OnCollisionExit(Collision collision)
@@ -67,6 +72,11 @@ namespace Assets.Scripts
             if (sugar != null)
             {
                 _antScript.Leave(sugar);
+            }
+            var apple = collision.gameObject.GetComponentInParent<Apple>();
+            if (apple != null)
+            {
+                _antScript.Leave(apple);
             }
         }
     }

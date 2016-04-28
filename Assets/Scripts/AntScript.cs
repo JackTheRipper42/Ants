@@ -10,13 +10,13 @@ namespace Assets.Scripts
         private readonly Script _script;
         private readonly EgoAnt _egoAnt;
 
-        public AntScript()
+        public AntScript(Ant ant)
         {
             UserData.RegisterType<Vector2>();
             UserData.RegisterType<AntTable>();
             UserData.RegisterType<SugarTable>();
             UserData.RegisterType<AppleTable>();
-            UserData.RegisterType<EgoAnt>();
+            UserData.RegisterType<IEgoAnt>();
 
             var scriptPath = Path.Combine(Application.streamingAssetsPath, "ant.lua");
 
@@ -26,7 +26,7 @@ namespace Assets.Scripts
             var scriptCode = File.ReadAllText(scriptPath);
             _script.DoString(scriptCode);
 
-            _egoAnt = new EgoAnt();
+            _egoAnt = new EgoAnt(ant);
             _script.Globals["ant"] = _egoAnt;
 
             var initFunction = _script.Globals.Get("init");

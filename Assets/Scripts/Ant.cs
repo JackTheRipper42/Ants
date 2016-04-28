@@ -9,8 +9,6 @@ namespace Assets.Scripts
         protected virtual void Start()
         {
             _antScript = new AntScript();
-
-            _antScript.Start();
         }
 
         protected virtual void Update()

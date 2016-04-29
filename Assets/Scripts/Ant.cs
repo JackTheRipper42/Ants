@@ -14,6 +14,8 @@ namespace Assets.Scripts
         private float _lerpPosition;
         private float _lerpLength;
 
+        public Vector3 AnthillPosition { get; set; }
+
         public void SetDestination(Vector3 destination)
         {
            _state = State.Walking;
@@ -106,6 +108,11 @@ namespace Assets.Scripts
             if (apple != null)
             {
                 _antScript.Reach(apple);
+            }
+            var anthill = collision.gameObject.GetComponentInParent<AntHill>();
+            if (anthill != null)
+            {
+                _antScript.Reach(anthill);
             }
         }
 

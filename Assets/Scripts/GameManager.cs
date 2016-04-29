@@ -18,16 +18,7 @@ namespace Assets.Scripts
             StartCoroutine(LoadLevel());
         }
 
-        private void CreateAnt(Vector3 position, Quaternion rotation)
-        {
-            var obj = Instantiate(AntPrefab);
-            obj.transform.parent = AntContainer;
-            obj.transform.position = position;
-            obj.transform.rotation = rotation;
-            obj.name = string.Format("ant {0}", _antNumber++);
-        }
-
-        private void SpawnAnts(Vector3 center)
+        private void SpawnAnts(Vector3 anthillPosition)
         {
             const int antCount = 20;
             const float radius = 6f;
@@ -40,8 +31,14 @@ namespace Assets.Scripts
                     0f,
                     radius*Mathf.Sin(angle));
                 var rotation = Quaternion.LookRotation(offset);
-                var position = offset + center;
-                CreateAnt(position, rotation);
+                var position = offset + anthillPosition;
+                var obj = Instantiate(AntPrefab);
+                obj.transform.parent = AntContainer;
+                obj.transform.position = position;
+                obj.transform.rotation = rotation;
+                obj.name = string.Format("ant {0}", _antNumber++);
+                var ant = obj.GetComponent<Ant>();
+                ant.AnthillPosition = anthillPosition;
             }
 
         }

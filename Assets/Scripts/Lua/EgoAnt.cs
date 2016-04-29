@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using MoonSharp.Interpreter;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Lua
@@ -43,6 +42,8 @@ namespace Assets.Scripts.Lua
 
         public DynValue reachApple { get; set; }
 
+        public DynValue reachAnthill { get; set; }
+
         public DynValue leaveSugar { get; set; }
 
         public DynValue leaveApple { get; set; }
@@ -63,6 +64,11 @@ namespace Assets.Scripts.Lua
                               new Vector3(direction, 0f, 0f)
                               + _ant.transform.position;
             _ant.SetDestination(destination);
+        }
+
+        public void goToAnthill()
+        {
+            _ant.SetDestination(_ant.AnthillPosition);
         }
 
         private Vector3 ToVector3(float x, float z)

@@ -2,6 +2,9 @@ function init()
 	ant.update = update;
 	ant.sugarEnterView = sugarEnterView;
 	ant.appleEnterView = appleEnterView;
+	ant.reachSugar = reachSugar;
+	ant.reachApple = reachApple;
+	ant.reachAnthill = reachAnthill;
 	
 	ant.setDestination(20, 0);
 	hasTarget = false;
@@ -22,4 +25,17 @@ function appleEnterView(apple)
 		ant.setDestinationGlobal(apple.position.x, apple.position.y);
 		hasTarget = true;
 	end
+end
+
+function reachSugar(sugar)
+	ant.goToAnthill();
+end
+
+function reachApple(apple)
+	ant.goToAnthill();
+end
+
+function reachAnthill()
+	ant.setDestination(20, 165);
+	hasTarget = false;
 end

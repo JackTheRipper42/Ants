@@ -23,6 +23,8 @@ namespace Assets.Scripts.Lua
 
         DynValue reachSugar { get; set; }
 
+        DynValue reachAnthill { get; set; }
+
         DynValue sugarEnterView { get; set; }
 
         DynValue sugarExitView { get; set; }
@@ -36,6 +38,8 @@ namespace Assets.Scripts.Lua
         void setDestinationLocal(float x, float y);
 
         void setDestination(float direction, float orientation);
+
+        void goToAnthill();
 
         // ReSharper restore InconsistentNaming
     }

@@ -25,6 +25,8 @@ namespace Assets.Scripts.Lua
 
         DynValue reachAnthill { get; set; }
 
+        DynValue reachDestination { get; set; }
+
         DynValue sugarEnterView { get; set; }
 
         DynValue sugarExitView { get; set; }

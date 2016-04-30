@@ -72,6 +72,7 @@ namespace Assets.Scripts
                     if (_lerpPosition >= 1)
                     {
                         _state = State.Idle;
+                        _antScript.ReachDestination();
                     }
                     break;
                 default:

@@ -83,6 +83,11 @@ namespace Assets.Scripts
             CallLuaFunction(_egoAnt.reachAnthill);
         }
 
+        public void ReachDestination()
+        {
+            CallLuaFunction(_egoAnt.reachDestination);
+        }
+
         public void Leave(Sugar sugar)
         {
             CallLuaFunction(_egoAnt.leaveSugar, new SugarTable(sugar));

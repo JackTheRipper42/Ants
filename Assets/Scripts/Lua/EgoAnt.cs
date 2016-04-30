@@ -49,6 +49,8 @@ namespace Assets.Scripts.Lua
 
         public DynValue reachAnthill { get; set; }
 
+        public DynValue reachDestination { get; set; }
+
         public DynValue leaveSugar { get; set; }
 
         public DynValue leaveApple { get; set; }

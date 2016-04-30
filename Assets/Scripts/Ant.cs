@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -13,8 +15,12 @@ namespace Assets.Scripts
         private Vector3 _startPosition;
         private float _lerpPosition;
         private float _lerpLength;
+        private List<Sugar> _nearSugar;
+        private List<Apple> _nearApples; 
 
         public Vector3 AnthillPosition { get; set; }
+        
+        public bool HasSugar { get; private set; }
 
         public void SetDestination(Vector3 destination)
         {
@@ -25,8 +31,30 @@ namespace Assets.Scripts
             _startPosition = transform.position;
         }
 
+        public bool PickSugar()
+        {
+            if (HasSugar)
+            {
+                return false;
+            }
+            var sugar = _nearSugar.FirstOrDefault();
+            if (sugar == null)
+            {
+                return false;
+            }
+            if (sugar.Capacity <= 0)
+            {
+                return false;
+            }
+            sugar.Capacity--;
+            HasSugar = true;
+            return true;
+        }
+
         protected virtual void Start()
         {
+            _nearSugar = new List<Sugar>();
+            _nearApples = new List<Apple>();
             _state = State.Idle;
             _antScript = new AntScript(this);
         }
@@ -102,16 +130,23 @@ namespace Assets.Scripts
             var sugar = collision.gameObject.GetComponentInParent<Sugar>();
             if (sugar != null)
             {
+                _nearSugar.Add(sugar);
                 _antScript.Reach(sugar);
             }
             var apple = collision.gameObject.GetComponentInParent<Apple>();
             if (apple != null)
             {
+                _nearApples.Add(apple);
                 _antScript.Reach(apple);
             }
             var anthill = collision.gameObject.GetComponentInParent<AntHill>();
             if (anthill != null)
             {
+                if (HasSugar)
+                {
+                    anthill.CollectedSugar++;
+                    HasSugar = false;
+                }
                 _antScript.Reach(anthill);
             }
         }
@@ -121,11 +156,13 @@ namespace Assets.Scripts
             var sugar = collision.gameObject.GetComponentInParent<Sugar>();
             if (sugar != null)
             {
+                _nearSugar.Remove(sugar);
                 _antScript.Leave(sugar);
             }
             var apple = collision.gameObject.GetComponentInParent<Apple>();
             if (apple != null)
             {
+                _nearApples.Remove(apple);
                 _antScript.Leave(apple);
             }
         }

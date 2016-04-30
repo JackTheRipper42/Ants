@@ -24,6 +24,11 @@ namespace Assets.Scripts.Lua
             get { return ToVector2(_ant.transform.position); }
         }
 
+        public bool isCarrying
+        {
+            get { return _ant.HasSugar; }
+        }
+
         public DynValue update { get; set; }
 
         public DynValue antEnterView { get; set; }
@@ -69,6 +74,11 @@ namespace Assets.Scripts.Lua
         public void goToAnthill()
         {
             _ant.SetDestination(_ant.AnthillPosition);
+        }
+
+        public bool pickSugar()
+        {
+            return _ant.PickSugar();
         }
 
         private Vector3 ToVector3(float x, float z)

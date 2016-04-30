@@ -8,5 +8,6 @@ namespace Assets.Scripts
 {
     public class Sugar : MonoBehaviour
     {
+        public int Capacity = 100;
     }
 }

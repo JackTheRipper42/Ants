@@ -33,6 +33,8 @@ namespace Assets.Scripts.Lua
 
         Vector2 position { get; }
 
+        bool isCarrying { get; }
+
         void setDestinationGlobal(float x, float y);
 
         void setDestinationLocal(float x, float y);
@@ -40,6 +42,8 @@ namespace Assets.Scripts.Lua
         void setDestination(float direction, float orientation);
 
         void goToAnthill();
+
+        bool pickSugar();
 
         // ReSharper restore InconsistentNaming
     }

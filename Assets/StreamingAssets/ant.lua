@@ -28,6 +28,7 @@ function appleEnterView(apple)
 end
 
 function reachSugar(sugar)
+	ant.pickSugar();
 	ant.goToAnthill();
 end
 

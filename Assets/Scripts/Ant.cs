@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -24,11 +25,18 @@ namespace Assets.Scripts
 
         public void SetDestination(Vector3 destination)
         {
-           _state = State.Walking;
-            _destination = destination;
-            _lerpPosition = 0;
-            _lerpLength = (destination - transform.position).magnitude;
-            _startPosition = transform.position;
+            var diff = destination - transform.position;
+            var angle = Mathf.Atan2(diff.z, diff.x)*Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, -angle, 0f);
+            InitDestination(destination);
+        }
+
+        public void SetDestination(float distance, float direction)
+        {
+            var newOrientation = transform.rotation*Quaternion.Euler(0f, direction, 0f);
+            var destination = newOrientation*new Vector3(distance, 0f, 0f) + transform.position;
+            transform.rotation = newOrientation;
+            InitDestination(destination);
         }
 
         public bool PickSugar()
@@ -42,11 +50,10 @@ namespace Assets.Scripts
             {
                 return false;
             }
-            if (sugar.Capacity <= 0)
+            if (!sugar.PickSugar())
             {
                 return false;
             }
-            sugar.Capacity--;
             HasSugar = true;
             return true;
         }
@@ -61,12 +68,14 @@ namespace Assets.Scripts
 
         protected virtual void Update()
         {
+            _nearSugar.RemoveAll(sugar => sugar == null);
+            _nearApples.RemoveAll(apple => apple == null);
+
             switch (_state)
             {
                 case State.Idle:
                     break;
                 case State.Walking:
-                    transform.rotation = Quaternion.LookRotation(_destination - transform.position);
                     _lerpPosition += (Speed*Time.deltaTime)/_lerpLength;
                     transform.position = Vector3.Lerp(_startPosition, _destination, _lerpPosition);
                     if (_lerpPosition >= 1)
@@ -166,6 +175,15 @@ namespace Assets.Scripts
                 _nearApples.Remove(apple);
                 _antScript.Leave(apple);
             }
+        }
+
+        private void InitDestination(Vector3 destination)
+        {
+            _state = State.Walking;
+            _destination = destination;
+            _lerpPosition = 0;
+            _lerpLength = (destination - transform.position).magnitude;
+            _startPosition = transform.position;
         }
 
         private enum State

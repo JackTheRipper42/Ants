@@ -39,9 +39,7 @@ namespace Assets.Scripts.Lua
 
         void setDestinationGlobal(float x, float y);
 
-        void setDestinationLocal(float x, float y);
-
-        void setDestination(float direction, float orientation);
+        void setDestination(float distance, float orientation);
 
         void goToAnthill();
 

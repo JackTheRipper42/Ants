@@ -60,17 +60,9 @@ namespace Assets.Scripts.Lua
             _ant.SetDestination(ToVector3(x, y));
         }
 
-        public void setDestinationLocal(float x, float y)
+        public void setDestination(float distance, float direction)
         {
-            _ant.SetDestination(_ant.transform.position + ToVector3(x, y));
-        }
-
-        public void setDestination(float direction, float orientation)
-        {
-            var destination = _ant.transform.rotation*Quaternion.Euler(0f, orientation, 0f)*
-                              new Vector3(direction, 0f, 0f)
-                              + _ant.transform.position;
-            _ant.SetDestination(destination);
+            _ant.SetDestination(distance, direction);
         }
 
         public void goToAnthill()

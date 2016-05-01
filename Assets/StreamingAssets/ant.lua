@@ -38,6 +38,10 @@ function reachSugar(sugar)
 end
 
 function reachApple(apple)
+	ant.pickApple();
+	if not ant.isCarrying then 
+		print("fuck")
+	end
 	ant.goToAnthill();
 end
 

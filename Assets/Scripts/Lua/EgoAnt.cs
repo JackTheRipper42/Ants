@@ -26,7 +26,7 @@ namespace Assets.Scripts.Lua
 
         public bool isCarrying
         {
-            get { return _ant.HasSugar; }
+            get { return _ant.IsCarrying; }
         }
 
         public DynValue update { get; set; }
@@ -73,6 +73,11 @@ namespace Assets.Scripts.Lua
         public bool pickSugar()
         {
             return _ant.PickSugar();
+        }
+
+        public bool pickApple()
+        {
+            return _ant.PickApple();
         }
 
         private Vector3 ToVector3(float x, float z)

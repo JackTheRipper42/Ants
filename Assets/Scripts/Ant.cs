@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -17,17 +16,24 @@ namespace Assets.Scripts
         private float _lerpPosition;
         private float _lerpLength;
         private List<Sugar> _nearSugar;
-        private List<Apple> _nearApples; 
+        private List<Apple> _nearApples;
+        private Carrying _carrying;
+        private Apple _carriedApple;
 
         public Vector3 AnthillPosition { get; set; }
-        
-        public bool HasSugar { get; private set; }
+
+        public bool IsCarrying
+        {
+            get { return _carrying != Carrying.Noting; }
+        }
+
+        public Vector3 Destination
+        {
+            get { return _destination; }
+        }
 
         public void SetDestination(Vector3 destination)
         {
-            var diff = destination - transform.position;
-            var angle = Mathf.Atan2(diff.z, diff.x)*Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, -angle, 0f);
             InitDestination(destination);
         }
 
@@ -35,13 +41,12 @@ namespace Assets.Scripts
         {
             var newOrientation = transform.rotation*Quaternion.Euler(0f, direction, 0f);
             var destination = newOrientation*new Vector3(distance, 0f, 0f) + transform.position;
-            transform.rotation = newOrientation;
             InitDestination(destination);
         }
 
         public bool PickSugar()
         {
-            if (HasSugar)
+            if (IsCarrying)
             {
                 return false;
             }
@@ -54,8 +59,32 @@ namespace Assets.Scripts
             {
                 return false;
             }
-            HasSugar = true;
+            _carrying = Carrying.Sugar;
             return true;
+        }
+
+        public bool PickApple()
+        {
+            if (IsCarrying)
+            {
+                return false;
+            }
+            var apple = _nearApples.FirstOrDefault();
+            if (apple == null)
+            {
+                return false;
+            }
+            _carriedApple = apple;
+            apple.AddCarryingAnt(this);
+            _carrying = Carrying.Apple;
+            return true;
+        }
+
+        public void RemoveCarriedApple()
+        {
+            _carrying = Carrying.Noting;
+            _carriedApple = null;
+            InitDestination(_destination);
         }
 
         protected virtual void Start()
@@ -76,12 +105,18 @@ namespace Assets.Scripts
                 case State.Idle:
                     break;
                 case State.Walking:
-                    _lerpPosition += (Speed*Time.deltaTime)/_lerpLength;
-                    transform.position = Vector3.Lerp(_startPosition, _destination, _lerpPosition);
-                    if (_lerpPosition >= 1)
+                    var diff = _destination - transform.position;
+                    var angle = Mathf.Atan2(diff.z, diff.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(0f, -angle, 0f);
+                    if (_carrying != Carrying.Apple)
                     {
-                        _state = State.Idle;
-                        _antScript.ReachDestination();
+                        _lerpPosition += (Speed*Time.deltaTime)/_lerpLength;
+                        transform.position = Vector3.Lerp(_startPosition, Destination, _lerpPosition);
+                        if (_lerpPosition >= 1)
+                        {
+                            _state = State.Idle;
+                            _antScript.ReachDestination();
+                        }
                     }
                     break;
                 default:
@@ -152,11 +187,27 @@ namespace Assets.Scripts
             var anthill = collision.gameObject.GetComponentInParent<AntHill>();
             if (anthill != null)
             {
-                if (HasSugar)
+                switch (_carrying)
                 {
-                    anthill.CollectedSugar++;
-                    HasSugar = false;
+                    case Carrying.Noting:
+                        break;
+                    case Carrying.Sugar:
+                        anthill.CollectedSugar++;                       
+                        break;
+                    case Carrying.Apple:
+                        if (_carriedApple != null)
+                        {
+                            anthill.CollectedApples++;
+                            _carriedApple.DestroyApple();
+                            _carriedApple = null;
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException(string.Format(
+                            "The carring state '{0}' is not supported.",
+                            _carrying));
                 }
+                _carrying = Carrying.Noting;
                 _antScript.Reach(anthill);
             }
         }
@@ -190,6 +241,13 @@ namespace Assets.Scripts
         {
             Idle,
             Walking
+        }
+
+        private enum Carrying
+        {
+            Noting,
+            Sugar,
+            Apple
         }
     }
 }

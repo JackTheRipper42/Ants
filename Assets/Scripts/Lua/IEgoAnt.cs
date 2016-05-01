@@ -45,6 +45,8 @@ namespace Assets.Scripts.Lua
 
         bool pickSugar();
 
+        bool pickApple();
+
         // ReSharper restore InconsistentNaming
     }
 }

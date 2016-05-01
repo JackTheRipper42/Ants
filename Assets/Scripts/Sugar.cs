@@ -6,16 +6,16 @@ namespace Assets.Scripts
     {
         public int InitialCapacity = 100;
 
-        private int _capacity;
+        public int Capacity { get; private set; }
 
         protected virtual void Start()
         {
-            _capacity = InitialCapacity;
+            Capacity = InitialCapacity;
         }
 
         protected virtual void Update()
         {
-            if (_capacity <= 0)
+            if (Capacity <= 0)
             {
                 Destroy(gameObject);
             }
@@ -23,11 +23,11 @@ namespace Assets.Scripts
 
         public bool PickSugar()
         {
-            if (_capacity <= 0)
+            if (Capacity <= 0)
             {
                 return false;
             }
-            _capacity--;
+            Capacity = Capacity - 1;
             return true;
         }
     }

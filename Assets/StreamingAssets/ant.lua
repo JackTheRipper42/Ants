@@ -1,5 +1,4 @@
 function init()
-	ant.update = update;
 	ant.sugarEnterView = sugarEnterView;
 	ant.appleEnterView = appleEnterView;
 	ant.reachSugar = reachSugar;
@@ -8,28 +7,24 @@ function init()
 	ant.reachDestination = reachDestination;
 	
 	ant.setDestination(20, 0);
-	hasTarget = false;
 	waypoints = 1;
-end
-
-function update()
+	knownSugar = nil;
 end
 
 function sugarEnterView(sugar)
-	if not hasTarget then
+	if not ant.isCarrying then
 		ant.setDestinationGlobal(sugar.position.x, sugar.position.y);
-		hasTarget = true;
 	end
 end
 
 function appleEnterView(apple)
-	if not hasTarget then
+	if not ant.isCarrying then
 		ant.setDestinationGlobal(apple.position.x, apple.position.y);
-		hasTarget = true;
 	end
 end
 
 function reachSugar(sugar)
+	knownSugar = sugar;
 	ant.pickSugar();
 	if not ant.isCarrying then
 		print("fuck");
@@ -46,19 +41,26 @@ function reachApple(apple)
 end
 
 function reachDestination()
-	print(waypoints);
 	if waypoints <= 3 then
 		print("turn");
 		ant.setDestination(20, 90);
 		waypoints = waypoints + 1;
 	else
-	print("go back");
 		ant.goToAnthill();
 	end
 end
 
 function reachAnthill()
-	ant.setDestination(20, 165);
+	if not knownSugar == nil then
+		local amount = knownSugar.getAmount();
+		if amount <= 0 then
+			knownSugar = nil;
+		end		
+	end
+	if knownSugar == nil then
+		ant.setDestination(20, 165);
+	else
+		ant.setDestinationGlobal(knownSugar.position.x, knownSugar.position.y);
+	end
 	waypoints = 1;
-	hasTarget = false;
 end

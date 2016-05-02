@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Lua
 {
-    public interface IEgoAnt
+    public interface IAntScript
     {
         // ReSharper disable InconsistentNaming
 

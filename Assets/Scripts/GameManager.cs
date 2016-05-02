@@ -8,7 +8,6 @@ namespace Assets.Scripts
     public class GameManager : MonoBehaviour
     {
         public GameObject AntPrefab;
-        public Transform AntContainer;
         public string LevelScene;
 
         private int _antNumber;
@@ -18,7 +17,7 @@ namespace Assets.Scripts
             StartCoroutine(LoadLevel());
         }
 
-        private void SpawnAnts(Vector3 anthillPosition)
+        private void SpawnAnts(Transform anthill)
         {
             const int antCount = 20;
             const float radius = 6f;
@@ -31,16 +30,15 @@ namespace Assets.Scripts
                     0f,
                     radius*Mathf.Sin(angle));
                 var rotation = Quaternion.LookRotation(offset);
-                var position = offset + anthillPosition;
+                var position = offset + anthill.position;
                 var obj = Instantiate(AntPrefab);
-                obj.transform.parent = AntContainer;
+                obj.transform.parent = anthill;
                 obj.transform.position = position;
                 obj.transform.rotation = rotation;
                 obj.name = string.Format("ant {0}", _antNumber++);
                 var ant = obj.GetComponent<Ant>();
-                ant.AnthillPosition = anthillPosition;
+                ant.AnthillPosition = anthill.position;
             }
-
         }
 
         private IEnumerator LoadLevel()
@@ -59,7 +57,7 @@ namespace Assets.Scripts
 
             foreach (var anthill in anthills)
             {
-                SpawnAnts(anthill.transform.position);
+                SpawnAnts(anthill.transform);
             }
         }
     }

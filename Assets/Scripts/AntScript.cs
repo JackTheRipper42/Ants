@@ -16,9 +16,9 @@ namespace Assets.Scripts
             _ant = ant;
 
             UserData.RegisterType<Vector2>();
-            UserData.RegisterType<AntTable>();
-            UserData.RegisterType<SugarTable>();
-            UserData.RegisterType<AppleTable>();
+            UserData.RegisterType<IAntTable>();
+            UserData.RegisterType<ISugarTable>(InteropAccessMode.Reflection);
+            UserData.RegisterType<IAppleTable>();
             UserData.RegisterType<IAntScript>();
 
             var scriptPath = Path.Combine(Application.streamingAssetsPath, "ant.lua");
@@ -43,7 +43,7 @@ namespace Assets.Scripts
 
         public Vector2 position
         {
-            get { return ToVector2(_ant.transform.position); }
+            get { return new Vector2(_ant.transform.position.x, _ant.transform.position.z); }
         }
 
         public bool isCarrying
@@ -79,7 +79,7 @@ namespace Assets.Scripts
 
         public void setDestinationGlobal(float x, float y)
         {
-            _ant.SetDestination(ToVector3(x, y));
+            _ant.SetDestination(new Vector3(x, _ant.transform.position.y, y));
         }
 
         public void setDestination(float distance, float direction)
@@ -165,16 +165,6 @@ namespace Assets.Scripts
         public void Leave(Apple apple)
         {
             CallLuaFunction(leaveApple, new AppleTable(apple));
-        }
-
-        private Vector3 ToVector3(float x, float z)
-        {
-            return new Vector3(x, _ant.transform.position.y, z);
-        }
-
-        private static Vector2 ToVector2(Vector3 value)
-        {
-            return new Vector2(value.x, value.z);
         }
 
         private void CallLuaFunction(DynValue function, params object[] args)

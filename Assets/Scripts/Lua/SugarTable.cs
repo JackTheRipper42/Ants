@@ -1,18 +1,20 @@
-﻿namespace Assets.Scripts.Lua
+﻿using UnityEngine;
+
+namespace Assets.Scripts.Lua
 {
-    public class SugarTable : EntityTable
+    public class SugarTable : EntityTable, ISugarTable
     {
         private readonly Sugar _sugar;
 
         public SugarTable(Sugar sugar)
-            : base(sugar)
+            :base(sugar)
         {
             _sugar = sugar;
         }
 
-        public int getAmount()
+        public int mount
         {
-            return _sugar.Capacity;
+            get { return _sugar.Capacity; }
         }
     }
 }

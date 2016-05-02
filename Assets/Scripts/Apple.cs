@@ -9,6 +9,11 @@ namespace Assets.Scripts
 
         private List<Ant> _carryingAnts;
 
+        public int CarryingAntsCount
+        {
+            get { return _carryingAnts.Count; }
+        }
+
         public void AddCarryingAnt(Ant ant)
         {
             _carryingAnts.Add(ant);
@@ -53,19 +58,5 @@ namespace Assets.Scripts
             }
             transform.position += movement;
         }
-
-        //protected virtual void OnCollisionEnter(Collision collision)
-        //{
-        //    var anthill = collision.gameObject.GetComponentInParent<AntHill>();
-        //    if (anthill != null)
-        //    {
-        //        anthill.CollectedApples++;
-        //        foreach (var ant in _carryingAnts)
-        //        {
-        //            ant.RemoveCarriedApple();
-        //        }
-        //        Destroy(gameObject);
-        //    }
-        //}
     }
 }

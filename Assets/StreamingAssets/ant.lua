@@ -19,7 +19,9 @@ end
 
 function appleEnterView(apple)
 	if not ant.isCarrying then
-		ant.setDestinationGlobal(apple.position.x, apple.position.y);
+		if apple.carryingAnts < 5 then
+			ant.setDestinationGlobal(apple.position.x, apple.position.y);
+		end
 	end
 end
 
@@ -33,16 +35,19 @@ function reachSugar(sugar)
 end
 
 function reachApple(apple)
-	ant.pickApple();
-	if not ant.isCarrying then 
-		print("fuck")
+	if apple.carryingAnts < 5 then
+		ant.pickApple();
+		if not ant.isCarrying then 
+			print("fuck")
+		end
+		ant.goToAnthill();
+	else
+		reachDestination();
 	end
-	ant.goToAnthill();
 end
 
 function reachDestination()
 	if waypoints <= 3 then
-		print("turn");
 		ant.setDestination(20, 90);
 		waypoints = waypoints + 1;
 	else
@@ -52,8 +57,7 @@ end
 
 function reachAnthill()
 	if not knownSugar == nil then
-		local amount = knownSugar.getAmount();
-		if amount <= 0 then
+		if knownSugar.amount <= 0 then
 			knownSugar = nil;
 		end		
 	end

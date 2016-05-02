@@ -2,10 +2,19 @@
 
 namespace Assets.Scripts.Lua
 {
-    public class AppleTable : EntityTable
+    public class AppleTable : EntityTable, IAppleTable
     {
-        public AppleTable(Apple apple) : base(apple)
+        private readonly Apple _apple;
+
+        public AppleTable(Apple apple)
+            :base(apple)
         {
+            _apple = apple;
+        }
+
+        public int carryingAnts
+        {
+            get { return _apple.CarryingAntsCount; }
         }
     }
 }

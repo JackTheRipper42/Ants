@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Lua
 {
-    public class AntTable : EntityTable
+    public class AntTable : EntityTable, IAntTable
     {
-        public AntTable(Ant ant)
-            : base(ant)
+        public AntTable(Ant ant) : base(ant)
         {
-
         }
     }
 }

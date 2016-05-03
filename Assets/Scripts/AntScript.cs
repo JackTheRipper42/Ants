@@ -19,6 +19,7 @@ namespace Assets.Scripts
             UserData.RegisterType<IAntTable>();
             UserData.RegisterType<ISugarTable>(InteropAccessMode.Reflection);
             UserData.RegisterType<IAppleTable>();
+            UserData.RegisterType<IMarkTable>();
             UserData.RegisterType<IAntScript>();
 
             var scriptPath = Path.Combine(Application.streamingAssetsPath, "ant.lua");
@@ -44,6 +45,11 @@ namespace Assets.Scripts
         public Vector2 position
         {
             get { return new Vector2(_ant.transform.position.x, _ant.transform.position.z); }
+        }
+
+        public float rotation
+        {
+            get { return _ant.transform.rotation.eulerAngles.y; }
         }
 
         public bool isCarrying
@@ -77,6 +83,10 @@ namespace Assets.Scripts
 
         public DynValue leaveApple { get; set; }
 
+        public DynValue reachMark { get; set; }
+
+        public DynValue leaveMark { get; set; }
+
         public void setDestinationGlobal(float x, float y)
         {
             _ant.SetDestination(new Vector3(x, _ant.transform.position.y, y));
@@ -100,6 +110,13 @@ namespace Assets.Scripts
         public bool pickApple()
         {
             return _ant.PickApple();
+        }
+
+        public void mark(float radius, Table information)
+        {
+            CheckTable(information);
+
+            _ant.CreateMark(radius, information);
         }
 
         public void Update()
@@ -152,6 +169,11 @@ namespace Assets.Scripts
             CallLuaFunction(reachAnthill);
         }
 
+        public void Reach(Mark mark)
+        {
+            CallLuaFunction(reachMark, new MarkTable(mark, _ant));
+        }
+
         public void ReachDestination()
         {
             CallLuaFunction(reachDestination);
@@ -167,11 +189,31 @@ namespace Assets.Scripts
             CallLuaFunction(leaveApple, new AppleTable(apple));
         }
 
+        public void Leave(Mark mark)
+        {
+            CallLuaFunction(leaveMark, new MarkTable(mark, _ant));
+        }
+
         private void CallLuaFunction(DynValue function, params object[] args)
         {
             if (function != null && !function.IsNil())
             {
                 _script.Call(function, args);
+            }
+        }
+
+        private static void CheckTable(Table table)
+        {
+            foreach (var dynValue in table.Values)
+            {
+                if (dynValue.Function != null)
+                {
+                    throw new InvalidOperationException("Functions are not allowd in marker informations.");
+                }
+                if (dynValue.Table != null)
+                {
+                    CheckTable(dynValue.Table);
+                }
             }
         }
     }

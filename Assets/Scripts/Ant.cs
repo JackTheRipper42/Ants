@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoonSharp.Interpreter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Assets.Scripts
     {
         public float Speed = 5f;
 
+        private GameManager _gameManager;
         private AntScript _antScript;
         private State _state;
         private Vector3 _destination;
@@ -20,7 +22,7 @@ namespace Assets.Scripts
         private Carrying _carrying;
         private Apple _carriedApple;
 
-        public Vector3 AnthillPosition { get; set; }
+        public Vector3 AnthillPosition { get; private set; }
 
         public bool IsCarrying
         {
@@ -30,6 +32,12 @@ namespace Assets.Scripts
         public Vector3 Destination
         {
             get { return _destination; }
+        }
+
+        public void Initialize(Vector3 anthillPosition, GameManager gameManager)
+        {
+            AnthillPosition = anthillPosition;
+            _gameManager = gameManager;
         }
 
         public void SetDestination(Vector3 destination)
@@ -85,6 +93,11 @@ namespace Assets.Scripts
             _carrying = Carrying.Noting;
             _carriedApple = null;
             InitDestination(_destination);
+        }
+
+        public void CreateMark(float radius, Table information)
+        {
+            _gameManager.SpawnMark(transform.position, transform.parent, radius, information);
         }
 
         protected virtual void Start()
@@ -210,6 +223,11 @@ namespace Assets.Scripts
                 _carrying = Carrying.Noting;
                 _antScript.Reach(anthill);
             }
+            var mark = collision.gameObject.GetComponent<Mark>();
+            if (mark != null)
+            {
+                _antScript.Reach(mark);
+            }
         }
 
         protected virtual void OnCollisionExit(Collision collision)
@@ -226,10 +244,17 @@ namespace Assets.Scripts
                 _nearApples.Remove(apple);
                 _antScript.Leave(apple);
             }
+            var mark = collision.gameObject.GetComponent<Mark>();
+            if (mark != null)
+            {
+                _antScript.Leave(mark);
+            }
         }
 
         private void InitDestination(Vector3 destination)
         {
+            Debug.DrawLine(transform.position, destination, Color.red, 1f);
+
             _state = State.Walking;
             _destination = destination;
             _lerpPosition = 0;

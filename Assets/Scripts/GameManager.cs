@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
+using MoonSharp.Interpreter;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,9 +10,25 @@ namespace Assets.Scripts
     public class GameManager : MonoBehaviour
     {
         public GameObject AntPrefab;
+        public GameObject MarkPrefab;
         public string LevelScene;
 
         private int _antNumber;
+        private int _markNumber;
+
+        public void SpawnMark(
+            Vector3 position,
+            Transform parent,
+            float radius,
+            Table information)
+        {
+            var obj = Instantiate(MarkPrefab);
+            obj.transform.position = position;
+            obj.transform.parent = parent;
+            obj.transform.name = string.Format("mark {0}", _markNumber++);
+            var mark = obj.GetComponent<Mark>();
+            mark.Initialize(radius, information);
+        }
 
         protected virtual void Start()
         {
@@ -37,9 +55,8 @@ namespace Assets.Scripts
                 obj.transform.rotation = rotation;
                 obj.name = string.Format("ant {0}", _antNumber++);
                 var ant = obj.GetComponent<Ant>();
-                ant.AnthillPosition = anthill.position;
+                ant.Initialize(anthill.position, this);
             }
-
         }
 
         private IEnumerator LoadLevel()

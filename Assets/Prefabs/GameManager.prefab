@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AntPrefab: {fileID: 189138, guid: 4f1fab5712ec5d447ac2e14ec8d5994d, type: 2}
+  MarkPrefab: {fileID: 129720, guid: 5597c42504703624ca8c86c149a31aa9, type: 2}
   LevelScene: level
 --- !u!1001 &100100000
 Prefab:

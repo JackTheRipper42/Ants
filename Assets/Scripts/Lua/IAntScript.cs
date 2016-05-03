@@ -31,9 +31,15 @@ namespace Assets.Scripts.Lua
 
         DynValue sugarExitView { get; set; }
 
+        DynValue reachMark { get; set; }
+
+        DynValue leaveMark { get; set; }
+
         DynValue update { get; set; }
 
         Vector2 position { get; }
+
+        float rotation { get; }
 
         bool isCarrying { get; }
 
@@ -46,6 +52,8 @@ namespace Assets.Scripts.Lua
         bool pickSugar();
 
         bool pickApple();
+
+        void mark(float radius, Table information);
 
         // ReSharper restore InconsistentNaming
     }

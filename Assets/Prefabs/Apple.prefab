@@ -43,7 +43,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 497774}
   - 95: {fileID: 9573088}
-  - 136: {fileID: 13660790}
   m_Layer: 0
   m_Name: Apfel#06
   m_TagString: Untagged
@@ -60,6 +59,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 423950}
   - 114: {fileID: 11409708}
+  - 136: {fileID: 13658984}
   m_Layer: 0
   m_Name: Apple
   m_TagString: Untagged
@@ -212,19 +212,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6feb95545097a4c9b2caaea4382a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &13660790
+  SpeedPerAnt: 1.5
+--- !u!136 &13658984
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 171104}
+  m_GameObject: {fileID: 190138}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1.5
-  m_Height: 3.72
+  m_Radius: 1.47
+  m_Height: 4.51
   m_Direction: 1
-  m_Center: {x: 0, y: -0.13, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

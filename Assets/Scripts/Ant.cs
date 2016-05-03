@@ -130,17 +130,17 @@ namespace Assets.Scripts
         {
             if (!other.isTrigger)
             {
-                var ant = other.gameObject.GetComponentInParent<Ant>();
+                var ant = other.gameObject.GetComponent<Ant>();
                 if (ant != null)
                 {
                     _antScript.EnterView(ant);
                 }
-                var sugar = other.gameObject.GetComponentInParent<Sugar>();
+                var sugar = other.gameObject.GetComponent<Sugar>();
                 if (sugar != null)
                 {
                     _antScript.EnterView(sugar);
                 }
-                var apple = other.gameObject.GetComponentInParent<Apple>();
+                var apple = other.gameObject.GetComponent<Apple>();
                 if (apple != null)
                 {
                     _antScript.EnterView(apple);
@@ -152,17 +152,17 @@ namespace Assets.Scripts
         {
             if (!other.isTrigger)
             {
-                var ant = other.gameObject.GetComponentInParent<Ant>();
+                var ant = other.gameObject.GetComponent<Ant>();
                 if (ant != null)
                 {
                     _antScript.ExitView(ant);
                 }
-                var sugar = other.gameObject.GetComponentInParent<Sugar>();
+                var sugar = other.gameObject.GetComponent<Sugar>();
                 if (sugar != null)
                 {
                     _antScript.ExitView(sugar);
                 }
-                var apple = other.gameObject.GetComponentInParent<Apple>();
+                var apple = other.gameObject.GetComponent<Apple>();
                 if (apple != null)
                 {
                     _antScript.ExitView(apple);
@@ -172,19 +172,19 @@ namespace Assets.Scripts
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
-            var sugar = collision.gameObject.GetComponentInParent<Sugar>();
+            var sugar = collision.gameObject.GetComponent<Sugar>();
             if (sugar != null)
             {
                 _nearSugar.Add(sugar);
                 _antScript.Reach(sugar);
             }
-            var apple = collision.gameObject.GetComponentInParent<Apple>();
+            var apple = collision.gameObject.GetComponent<Apple>();
             if (apple != null)
             {
                 _nearApples.Add(apple);
                 _antScript.Reach(apple);
             }
-            var anthill = collision.gameObject.GetComponentInParent<AntHill>();
+            var anthill = collision.gameObject.GetComponent<AntHill>();
             if (anthill != null)
             {
                 switch (_carrying)
@@ -214,13 +214,13 @@ namespace Assets.Scripts
 
         protected virtual void OnCollisionExit(Collision collision)
         {
-            var sugar = collision.gameObject.GetComponentInParent<Sugar>();
+            var sugar = collision.gameObject.GetComponent<Sugar>();
             if (sugar != null)
             {
                 _nearSugar.Remove(sugar);
                 _antScript.Leave(sugar);
             }
-            var apple = collision.gameObject.GetComponentInParent<Apple>();
+            var apple = collision.gameObject.GetComponent<Apple>();
             if (apple != null)
             {
                 _nearApples.Remove(apple);

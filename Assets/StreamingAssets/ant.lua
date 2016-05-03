@@ -6,7 +6,7 @@ function init()
 	ant.reachAnthill = reachAnthill;
 	ant.reachDestination = reachDestination;
 	
-	ant.setDestination(20, math.random(-10,10));
+	ant.setDestination(100, math.random(-10,10));
 	waypoints = 1;
 	knownSugar = nil;
 end
@@ -48,7 +48,7 @@ end
 
 function reachDestination()
 	if waypoints <= 3 then
-		ant.setDestination(20, math.random(75, 105));
+		ant.setDestination(40, math.random(75, 105));
 		waypoints = waypoints + 1;
 	else
 		ant.goToAnthill();

@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     public class Apple : MonoBehaviour
     {
-        public float SpeedPerAnt = 1.5f;
+        public float SpeedPerAnt = 0.5f;
 
         private List<Ant> _carryingAnts;
 

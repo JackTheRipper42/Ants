@@ -19,7 +19,7 @@ end
 
 function appleEnterView(apple)
 	if not ant.isCarrying then
-		if apple.carryingAnts < 5 then
+		if apple.carryingAnts < 10 then
 			ant.setDestinationGlobal(apple.position.x, apple.position.y);
 		end
 	end
@@ -35,7 +35,7 @@ function reachSugar(sugar)
 end
 
 function reachApple(apple)
-	if apple.carryingAnts < 5 then
+	if apple.carryingAnts < 10 then
 		ant.pickApple();
 		if not ant.isCarrying then 
 			print("fuck")

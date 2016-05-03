@@ -17,17 +17,16 @@ namespace Assets.Scripts
         private int _markNumber;
 
         public void SpawnMark(
-            Vector3 position,
-            Transform parent,
+            Ant creator,
             float radius,
             Table information)
         {
             var obj = Instantiate(MarkPrefab);
-            obj.transform.position = position;
-            obj.transform.parent = parent;
+            obj.transform.position = creator.transform.position;
+            obj.transform.parent = creator.transform.parent;
             obj.transform.name = string.Format("mark {0}", _markNumber++);
             var mark = obj.GetComponent<Mark>();
-            mark.Initialize(radius, information);
+            mark.Initialize(radius, information, creator);
         }
 
         protected virtual void Start()

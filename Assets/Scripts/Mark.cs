@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
@@ -9,10 +11,6 @@ namespace Assets.Scripts
         private const float MinSize = 5f;
         private const float MaxAge = 10f;
 
-        //private float _maxRadius;
-        //private float _radius;
-        //private float _decay;
-        //private float _remainingTime;
         private float _age;
         private float _maxAge;
         private float _radius;
@@ -20,18 +18,25 @@ namespace Assets.Scripts
 
         public Table Information { get; private set; }
 
-        public void Initialize(float radius, Table information)
+        public Ant Creator { get; private set; }
+
+        public void Initialize(float radius, [CanBeNull] Table information, [NotNull] Ant creator)
         {
+            if (creator == null)
+            {
+                throw new ArgumentNullException("creator");
+            }
+            if (radius <= 0)
+            {
+                throw new ArgumentOutOfRangeException("radius", radius, "The radius is less or equal to zero.");
+            }
+
             _initialized = true;
-            Information = information;
             _radius = radius;
+            Information = information;
+            Creator = creator;
             _age = 0f;
             _maxAge = MaxAge*MinSize/(MinSize + radius);
-
-            //_maxRadius = radius;
-            //_decay = 10;
-            //_radius = 0.01f;
-            //_remainingTime = 5000f/radius;
         }
 
         protected virtual void Update()
@@ -50,27 +55,6 @@ namespace Assets.Scripts
             {
                 Destroy(gameObject);
             }
-
-            //_radius += Time.deltaTime*10f;
-            //_radius = Mathf.Min(_maxRadius, _radius);
-            //_remainingTime -= Time.deltaTime*_decay;
-
-            //transform.localScale = new Vector3(_radius, transform.transform.localScale.y, _radius);
-
-            //if (_remainingTime <= 0)
-            //{
-            //    Destroy(gameObject);
-            //}
-
-            //if (_radius > 0)
-            //{
-            //    transform.localScale = new Vector3(_radius, transform.transform.localScale.y, _radius);
-            //    _radius -= Time.deltaTime*_decay;
-            //}
-            //else
-            //{
-            //    Destroy(gameObject);
-            //}
         }
     }
 }

@@ -97,7 +97,7 @@ namespace Assets.Scripts
 
         public void CreateMark(float radius, Table information)
         {
-            _gameManager.SpawnMark(transform.position, transform.parent, radius, information);
+            _gameManager.SpawnMark(this, radius, information);
         }
 
         protected virtual void Start()
@@ -226,7 +226,10 @@ namespace Assets.Scripts
             var mark = collision.gameObject.GetComponent<Mark>();
             if (mark != null)
             {
-                _antScript.Reach(mark);
+                if (mark.Creator != this)
+                {
+                    _antScript.Reach(mark);
+                }
             }
         }
 
@@ -247,7 +250,10 @@ namespace Assets.Scripts
             var mark = collision.gameObject.GetComponent<Mark>();
             if (mark != null)
             {
-                _antScript.Leave(mark);
+                if (mark.Creator != this)
+                {
+                    _antScript.Leave(mark);
+                }
             }
         }
 

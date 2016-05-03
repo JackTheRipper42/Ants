@@ -8,8 +8,6 @@ namespace Assets.Scripts
 {
     public class Ant : MonoBehaviour
     {
-        public float Speed = 5f;
-
         private GameManager _gameManager;
         private AntScript _antScript;
         private State _state;
@@ -23,6 +21,8 @@ namespace Assets.Scripts
         private Apple _carriedApple;
 
         public Vector3 AnthillPosition { get; private set; }
+
+        public float Speed { get { return 5; } }
 
         public bool IsCarrying
         {

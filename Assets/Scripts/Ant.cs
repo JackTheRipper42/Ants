@@ -261,14 +261,6 @@ namespace Assets.Scripts
                 _nearApples.Remove(apple);
                 _antScript.Leave(apple);
             }
-            var mark = collision.gameObject.GetComponent<Mark>();
-            if (mark != null)
-            {
-                if (mark.Creator != this)
-                {
-                    _antScript.Leave(mark);
-                }
-            }
         }
 
         private void InitDestination(Vector3 destination)

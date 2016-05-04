@@ -35,8 +35,6 @@ namespace Assets.Scripts.Lua
 
         DynValue reachMark { get; set; }
 
-        DynValue leaveMark { get; set; }
-
         DynValue update { get; set; }
 
         Vector2 position { get; }

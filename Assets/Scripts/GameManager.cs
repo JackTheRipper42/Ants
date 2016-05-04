@@ -16,6 +16,8 @@ namespace Assets.Scripts
         private int _antNumber;
         private int _markNumber;
 
+        public Rect LevelBoundaries { get; private set; }
+
         public void SpawnMark(
             Ant creator,
             float radius,
@@ -70,8 +72,10 @@ namespace Assets.Scripts
             var scene = SceneManager.GetSceneByName(LevelScene);
             var rootGameObjects = scene.GetRootGameObjects();
 
-            var anthills = rootGameObjects.SelectMany(root => root.GetComponentsInChildren<AntHill>());
+            var level = rootGameObjects.SelectMany(root => root.GetComponentsInChildren<Level>()).First();
+            LevelBoundaries = level.GetLevelBounds();
 
+            var anthills = rootGameObjects.SelectMany(root => root.GetComponentsInChildren<AntHill>());
             foreach (var anthill in anthills)
             {
                 SpawnAnts(anthill.transform);

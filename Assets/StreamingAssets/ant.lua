@@ -6,8 +6,9 @@ function init()
 	ant.reachAnthill = reachAnthill;
 	ant.reachDestination = reachDestination;
 	ant.reachMark = reachMark;
+	ant.reachBoundaries = reachBoundaries;
 
-	ant.setDestination(100, math.random(-10,10));
+	ant.setDestination(math.random(50, 200), math.random(-10,10));
 	waypoints = 1;
 	knownSugar = nil;
 	hasTarget = false;
@@ -72,13 +73,7 @@ function reachApple(apple)
 end
 
 function reachDestination()
-	hasTarget = false;
-	if waypoints <= 3 then
-		ant.setDestination(40, math.random(75, 105));
-		waypoints = waypoints + 1;
-	else
-		ant.goToAnthill();
-	end
+	setWaypoint(math.random(50, 200), math.random(75, 105));
 end
 
 function reachAnthill()
@@ -90,9 +85,23 @@ function reachAnthill()
 		end		
 	end
 	if knownSugar == nil then
-		ant.setDestination(20, math.random(150, 175));
+		setWaypoint(math.random(50, 200), math.random(150, 175));
 	else
 		ant.setDestinationGlobal(knownSugar.position.x, knownSugar.position.y);
 		hasTarget = true;
+	end
+end
+
+function reachBoundaries()
+	setWaypoint(math.random(50, 200), math.random(170, 190));
+end
+
+function setWaypoint(distance, direction)
+	hasTarget = false;
+	if waypoints <= 4 then
+		ant.setDestination(distance, direction);
+		waypoints = waypoints + 1;
+	else
+		ant.goToAnthill();
 	end
 end

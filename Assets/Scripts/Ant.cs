@@ -11,7 +11,6 @@ namespace Assets.Scripts
         private GameManager _gameManager;
         private AntScript _antScript;
         private State _state;
-        private Vector3 _destination;
         private Vector3 _startPosition;
         private float _lerpPosition;
         private float _lerpLength;
@@ -29,10 +28,7 @@ namespace Assets.Scripts
             get { return _carrying != Carrying.Noting; }
         }
 
-        public Vector3 Destination
-        {
-            get { return _destination; }
-        }
+        public Vector3 Destination { get; private set; }
 
         public void Initialize(Vector3 anthillPosition, GameManager gameManager)
         {
@@ -92,7 +88,7 @@ namespace Assets.Scripts
         {
             _carrying = Carrying.Noting;
             _carriedApple = null;
-            InitDestination(_destination);
+            InitDestination(Destination);
         }
 
         public void CreateMark(float radius, Table information)
@@ -118,17 +114,28 @@ namespace Assets.Scripts
                 case State.Idle:
                     break;
                 case State.Walking:
-                    var diff = _destination - transform.position;
+                    var diff = Destination - transform.position;
                     var angle = Mathf.Atan2(diff.z, diff.x) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0f, -angle, 0f);
                     if (_carrying != Carrying.Apple)
                     {
                         _lerpPosition += (Speed*Time.deltaTime)/_lerpLength;
-                        transform.position = Vector3.Lerp(_startPosition, Destination, _lerpPosition);
-                        if (_lerpPosition >= 1)
+                        var newPosition = Vector3.Lerp(_startPosition, Destination, _lerpPosition);
+                        var newPosition2D = new Vector2(newPosition.x, newPosition.z);
+                        if (_gameManager.LevelBoundaries.Contains(newPosition2D))
+                        {
+                            transform.position = newPosition;
+                            if (_lerpPosition >= 1)
+                            {
+                                _state = State.Idle;
+                                _antScript.ReachDestination();
+                            }
+                        }
+                        else
                         {
                             _state = State.Idle;
-                            _antScript.ReachDestination();
+                            Destination = transform.position;
+                            _antScript.ReachBoundaries();
                         }
                     }
                     break;
@@ -231,6 +238,13 @@ namespace Assets.Scripts
                     _antScript.Reach(mark);
                 }
             }
+            var level = collision.gameObject.GetComponentInParent<Level>();
+            if (level != null)
+            {
+                _state = State.Idle;
+                Destination = transform.position;
+                _antScript.ReachBoundaries();
+            }
         }
 
         protected virtual void OnCollisionExit(Collision collision)
@@ -262,7 +276,7 @@ namespace Assets.Scripts
             Debug.DrawLine(transform.position, destination, Color.red, 1f);
 
             _state = State.Walking;
-            _destination = destination;
+            Destination = destination;
             _lerpPosition = 0;
             _lerpLength = (destination - transform.position).magnitude;
             _startPosition = transform.position;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -9,11 +10,11 @@ namespace Assets.Scripts
         public Rect GetLevelBounds()
         {
             var scale = CalculateTotalScale(Ground);
-            return new Rect(
-                Ground.transform.position.x,
-                Ground.transform.position.z,
-                scale.x,
-                scale.z);
+            return Rect.MinMaxRect(
+                Ground.position.x - scale.x/2,
+                Ground.position.z - scale.y/2,
+                Ground.position.x + scale.x/2,
+                Ground.position.z + scale.y/2);
         }
 
         private static Vector3 CalculateTotalScale(Transform transform)

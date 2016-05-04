@@ -79,6 +79,8 @@ namespace Assets.Scripts
 
         public DynValue reachDestination { get; set; }
 
+        public DynValue reachBoundaries { get; set; }
+
         public DynValue leaveSugar { get; set; }
 
         public DynValue leaveApple { get; set; }
@@ -177,6 +179,11 @@ namespace Assets.Scripts
         public void ReachDestination()
         {
             CallLuaFunction(reachDestination);
+        }
+
+        public void ReachBoundaries()
+        {
+            CallLuaFunction(reachBoundaries);
         }
 
         public void Leave(Sugar sugar)

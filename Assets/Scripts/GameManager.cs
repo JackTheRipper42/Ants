@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using MoonSharp.Interpreter;
+using System.Collections;
 using System.Linq;
-using MoonSharp.Interpreter;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +14,7 @@ namespace Assets.Scripts
 
         private int _antNumber;
         private int _markNumber;
+        private Parameters _parameters;
 
         public Rect LevelBoundaries { get; private set; }
 
@@ -33,6 +33,7 @@ namespace Assets.Scripts
 
         protected virtual void Start()
         {
+            _parameters = FindObjectOfType<Parameters>();
             StartCoroutine(LoadLevel());
         }
 
@@ -56,7 +57,7 @@ namespace Assets.Scripts
                 obj.transform.rotation = rotation;
                 obj.name = string.Format("ant {0}", _antNumber++);
                 var ant = obj.GetComponent<Ant>();
-                ant.Initialize(anthill.position, this);
+                ant.Initialize(anthill.position, this, _parameters.AntScriptName);
             }
         }
 

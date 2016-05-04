@@ -11,7 +11,7 @@ namespace Assets.Scripts
         private readonly Script _script;
         private readonly Ant _ant;
 
-        public AntScript(Ant ant)
+        public AntScript(Ant ant, string scriptName)
         {
             _ant = ant;
 
@@ -22,7 +22,7 @@ namespace Assets.Scripts
             UserData.RegisterType<IMarkTable>();
             UserData.RegisterType<IAntScript>();
 
-            var scriptPath = Path.Combine(Application.streamingAssetsPath, "ant.lua");
+            var scriptPath = Path.Combine(Application.streamingAssetsPath, scriptName);
             var scriptCode = File.ReadAllText(scriptPath);
 
             _script = new Script(CoreModules.Preset_HardSandbox);

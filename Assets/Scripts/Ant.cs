@@ -30,10 +30,14 @@ namespace Assets.Scripts
 
         public Vector3 Destination { get; private set; }
 
-        public void Initialize(Vector3 anthillPosition, GameManager gameManager)
+        public void Initialize(Vector3 anthillPosition, GameManager gameManager, string scriptName)
         {
+            _state = State.Idle;
             AnthillPosition = anthillPosition;
             _gameManager = gameManager;
+            _nearSugar = new List<Sugar>();
+            _nearApples = new List<Apple>();
+            _antScript = new AntScript(this, scriptName);
         }
 
         public void SetDestination(Vector3 destination)
@@ -94,14 +98,6 @@ namespace Assets.Scripts
         public void CreateMark(float radius, Table information)
         {
             _gameManager.SpawnMark(this, radius, information);
-        }
-
-        protected virtual void Start()
-        {
-            _nearSugar = new List<Sugar>();
-            _nearApples = new List<Apple>();
-            _state = State.Idle;
-            _antScript = new AntScript(this);
         }
 
         protected virtual void Update()

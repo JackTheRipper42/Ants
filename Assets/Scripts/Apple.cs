@@ -55,7 +55,7 @@ namespace Assets.Scripts
             var anthill = collision.gameObject.GetComponent<Anthill>();
             if (anthill != null)
             {
-                anthill.CollectedApples++;
+                anthill.CollectApple();
                 DestroyApple();
             }
         }

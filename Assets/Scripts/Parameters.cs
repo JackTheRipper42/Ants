@@ -10,12 +10,15 @@ namespace Assets.Scripts
 
         public string[] AntScripts { get; private set; } 
 
+        public float TimeScale { get; set; }
+
         protected virtual void Start()
         {
             DontDestroyOnLoad(this);
             var files = Directory.GetFiles(Application.streamingAssetsPath, "*.lua");
             AntScripts = files.Select(file => new FileInfo(file).Name).ToArray();
             AntScriptName = AntScripts.First();
+            TimeScale = 1f;
         }
     }
 }

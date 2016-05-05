@@ -99,42 +99,46 @@ namespace Assets.Scripts
 
         protected virtual void Update()
         {
-            _nearSugar.RemoveAll(sugar => sugar == null);
-            _nearApples.RemoveAll(apple => apple == null);
-
-            switch (_state)
+            if (Time.deltaTime > 0f)
             {
-                case State.Idle:
-                    break;
-                case State.Walking:
-                    transform.rotation = Quaternion.LookRotation(Destination - _startPosition);
-                    if (_carrying != Carrying.Apple)
-                    {
-                        _lerpPosition += (Speed*Time.deltaTime)/_lerpLength;
-                        var newPosition = Vector3.Lerp(_startPosition, Destination, _lerpPosition);
-                        var newPosition2D = new Vector2(newPosition.x, newPosition.z);
-                        if (_gameManager.LevelBoundaries.Contains(newPosition2D))
+
+                _nearSugar.RemoveAll(sugar => sugar == null);
+                _nearApples.RemoveAll(apple => apple == null);
+
+                switch (_state)
+                {
+                    case State.Idle:
+                        break;
+                    case State.Walking:
+                        transform.rotation = Quaternion.LookRotation(Destination - _startPosition);
+                        if (_carrying != Carrying.Apple)
                         {
-                            transform.position = newPosition;
-                            if (_lerpPosition >= 1)
+                            _lerpPosition += (Speed*Time.deltaTime)/_lerpLength;
+                            var newPosition = Vector3.Lerp(_startPosition, Destination, _lerpPosition);
+                            var newPosition2D = new Vector2(newPosition.x, newPosition.z);
+                            if (_gameManager.LevelBoundaries.Contains(newPosition2D))
+                            {
+                                transform.position = newPosition;
+                                if (_lerpPosition >= 1)
+                                {
+                                    _state = State.Idle;
+                                    _antScript.ReachDestination();
+                                }
+                            }
+                            else
                             {
                                 _state = State.Idle;
-                                _antScript.ReachDestination();
+                                Destination = transform.position;
+                                _antScript.ReachBoundaries();
                             }
                         }
-                        else
-                        {
-                            _state = State.Idle;
-                            Destination = transform.position;
-                            _antScript.ReachBoundaries();
-                        }
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                _antScript.Update();
             }
-            
-            _antScript.Update();
         }
 
         protected virtual void OnTriggerEnter(Collider other)
@@ -204,7 +208,7 @@ namespace Assets.Scripts
                         _antScript.Reach(anthill);
                         break;
                     case Carrying.Sugar:
-                        anthill.CollectedSugar++;
+                        anthill.CollectSugar();
                         _carrying = Carrying.Noting;
                         _antScript.Reach(anthill);
                         break;

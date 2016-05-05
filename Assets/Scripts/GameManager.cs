@@ -1,9 +1,10 @@
-﻿using MoonSharp.Interpreter;
+﻿using System;
+using MoonSharp.Interpreter;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
@@ -21,11 +22,26 @@ namespace Assets.Scripts
         private int _markNumber;
         private int _sugarNumber;
         private int _appleNumber;
+        private int _points;
         private Level _level;
         private Parameters _parameters;
-        private List<Anthill> _anthills;
+
+        public event EventHandler<EventArgs> PointsChanged; 
 
         public Rect LevelBoundaries { get; private set; }
+
+        public int Points
+        {
+            get { return _points; }
+            set
+            {
+                if (value != _points)
+                {
+                    _points = value;
+                    OnPointsChanged();
+                }
+            }
+        }
 
         public void SpawnMark(
             Ant creator,
@@ -40,9 +56,20 @@ namespace Assets.Scripts
             mark.Initialize(radius, information, creator);
         }
 
+        public void PlayerCollectSugar()
+        {
+            Points += 1;
+        }
+
+        public void PlayerCollectApple()
+        {
+            Points += 100;
+        }
+
         protected virtual void Start()
         {
             _parameters = FindObjectOfType<Parameters>();
+            Points = 0;
             StartCoroutine(LoadLevel());
         }
 
@@ -95,12 +122,12 @@ namespace Assets.Scripts
 
             _level = rootGameObjects.SelectMany(root => root.GetComponentsInChildren<Level>()).First();
             LevelBoundaries = _level.GetLevelBounds();
-            _anthills = rootGameObjects.SelectMany(root => root.GetComponentsInChildren<Anthill>()).ToList();
+            var anthills = rootGameObjects.SelectMany(root => root.GetComponentsInChildren<Anthill>()).ToList();
 
             StartCoroutine(SpawnSugarRoutine());
             StartCoroutine(SpawnApplesRoutine());
 
-            foreach (var anthill in _anthills)
+            foreach (var anthill in anthills)
             {
                 SpawnAnts(anthill);
             }
@@ -186,6 +213,15 @@ namespace Assets.Scripts
             }
 
             return true;
+        }
+
+        protected virtual void OnPointsChanged()
+        {
+            var handler = PointsChanged;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
     }
 }

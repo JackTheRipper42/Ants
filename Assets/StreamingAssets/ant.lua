@@ -73,7 +73,7 @@ function reachApple(apple)
 end
 
 function reachDestination()
-	setWaypoint(math.random(50, 200), math.random(75, 105));
+	setWaypoint(math.random(50, 200), math.random(75, 285));
 end
 
 function reachAnthill()
@@ -85,7 +85,7 @@ function reachAnthill()
 		end		
 	end
 	if knownSugar == nil then
-		setWaypoint(math.random(50, 200), math.random(150, 175));
+		setWaypoint(math.random(50, 200), math.random(120, 240));
 	else
 		ant.setDestinationGlobal(knownSugar.position.x, knownSugar.position.y);
 		hasTarget = true;
@@ -93,7 +93,7 @@ function reachAnthill()
 end
 
 function reachBoundaries()
-	setWaypoint(math.random(50, 200), math.random(170, 190));
+	setWaypoint(math.random(50, 200), math.random(160, 200));
 end
 
 function setWaypoint(distance, direction)

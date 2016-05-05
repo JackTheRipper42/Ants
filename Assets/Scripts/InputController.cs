@@ -9,6 +9,9 @@ namespace Assets.Scripts
             var mouseX = Input.GetAxis("Mouse X");
             var mouseY = Input.GetAxis("Mouse Y");
             var mouseWheel = Input.GetAxis("Mouse ScrollWheel");
+            var horizontal = Input.GetAxis("Horizontal");
+            var vertical = Input.GetAxis("Vertical");
+            var upDown = Input.GetAxis("UpDown");
 
             if (Input.GetAxis("Fire2") > 0)
             {
@@ -19,6 +22,7 @@ namespace Assets.Scripts
                     new Vector3(Camera.main.transform.right.x, 0f, Camera.main.transform.right.z),
                     -mouseY*4,
                     Space.World);
+                Camera.main.transform.Translate(new Vector3(horizontal, upDown, vertical), Space.Self);
             }
             if (Input.GetAxis("Fire3") > 0)
             {

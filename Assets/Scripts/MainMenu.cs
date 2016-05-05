@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace Assets.Scripts
         public string SimulationScene;
         public GameObject MainMenuPanel;
         public GameObject OptionsMenuPanel;
-        public InputField AntScriptNameInputField;
+        public Dropdown AntScriptNameDropdown;
 
         private Parameters _parameters;
 
@@ -36,9 +37,9 @@ namespace Assets.Scripts
             OptionsMenuPanel.SetActive(false);
         }
 
-        public void EndEditingScriptName(string scriptName)
+        public void ScriptSelected(int index)
         {
-            _parameters.AntScriptName = scriptName;
+            _parameters.AntScriptName = _parameters.AntScripts[index];
         }
 
         protected virtual void Start()
@@ -46,7 +47,10 @@ namespace Assets.Scripts
             _parameters = FindObjectOfType<Parameters>();
             MainMenuPanel.SetActive(true);
             OptionsMenuPanel.SetActive(false);
-            AntScriptNameInputField.text = _parameters.AntScriptName;
+            AntScriptNameDropdown.options = _parameters.AntScripts
+                .Select(file => new Dropdown.OptionData(file))
+                .ToList();
+            AntScriptNameDropdown.value = 0;
         }
 
         private IEnumerator LoadLevel()

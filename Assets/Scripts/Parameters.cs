@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -6,10 +8,14 @@ namespace Assets.Scripts
     {
         public string AntScriptName { get; set; }
 
+        public string[] AntScripts { get; private set; } 
+
         protected virtual void Start()
         {
             DontDestroyOnLoad(this);
-            AntScriptName = "ant.lua";
+            var files = Directory.GetFiles(Application.streamingAssetsPath, "*.lua");
+            AntScripts = files.Select(file => new FileInfo(file).Name).ToArray();
+            AntScriptName = AntScripts.First();
         }
     }
 }

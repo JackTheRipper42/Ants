@@ -8,9 +8,8 @@ namespace Assets.Scripts.Lua
         public MarkTable(Mark mark, Ant ant)
         {
             information = mark.Information;
-            var diff = mark.transform.position - ant.transform.position;
-            direction = -Mathf.Atan2(diff.z, diff.x)*Mathf.Rad2Deg;
-            direction -= ant.transform.rotation.eulerAngles.y;
+            var globalDirection = Quaternion.LookRotation(mark.transform.position - ant.transform.position);
+            direction = globalDirection.eulerAngles.y - ant.transform.rotation.eulerAngles.y;
         }
 
         public Table information { get; private set; }

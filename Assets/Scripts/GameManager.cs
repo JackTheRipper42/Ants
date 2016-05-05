@@ -53,17 +53,12 @@ namespace Assets.Scripts
 
             for (var i = 0; i < antCount; i++)
             {
-                var angle = i*2*Mathf.PI/antCount;
-                var offset = new Vector3(
-                    radius*Mathf.Cos(angle),
-                    0f,
-                    radius*Mathf.Sin(angle));
-                var rotation = Quaternion.LookRotation(offset);
-                var position = offset + anthill.transform.position;
+                var angle = i*360/antCount;
+                var offset = Quaternion.Euler(0f, angle, 0f)*Vector3.forward*radius;
                 var obj = Instantiate(AntPrefab);
                 obj.transform.parent = anthill.AntContainer;
-                obj.transform.position = position;
-                obj.transform.rotation = rotation;
+                obj.transform.position = offset + anthill.transform.position;
+                obj.transform.rotation = Quaternion.LookRotation(offset);
                 obj.name = string.Format("ant {0}", _antNumber++);
                 var ant = obj.GetComponent<Ant>();
                 ant.Initialize(anthill.transform.position, this, _parameters.AntScriptName);

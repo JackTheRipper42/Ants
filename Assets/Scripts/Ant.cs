@@ -46,8 +46,8 @@ namespace Assets.Scripts
 
         public void SetDestination(float distance, float direction)
         {
-            var newOrientation = transform.rotation*Quaternion.Euler(0f, direction, 0f);
-            var destination = newOrientation*new Vector3(distance, 0f, 0f) + transform.position;
+            transform.Rotate(new Vector3(0f, direction, 0f), Space.World);
+            var destination = transform.forward*distance + transform.position;
             InitDestination(destination);
         }
 
@@ -107,9 +107,7 @@ namespace Assets.Scripts
                 case State.Idle:
                     break;
                 case State.Walking:
-                    var diff = Destination - transform.position;
-                    var angle = Mathf.Atan2(diff.z, diff.x) * Mathf.Rad2Deg;
-                    transform.rotation = Quaternion.Euler(0f, -angle, 0f);
+                    transform.rotation = Quaternion.LookRotation(Destination - _startPosition);
                     if (_carrying != Carrying.Apple)
                     {
                         _lerpPosition += (Speed*Time.deltaTime)/_lerpLength;

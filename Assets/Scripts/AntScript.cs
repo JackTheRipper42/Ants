@@ -164,7 +164,7 @@ namespace Assets.Scripts
             CallLuaFunction(reachApple, new AppleTable(apple));
         }
 
-        public void Reach(AntHill antHill)
+        public void Reach(Anthill anthill)
         {
             CallLuaFunction(reachAnthill);
         }

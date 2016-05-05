@@ -5,6 +5,7 @@ namespace Assets.Scripts
     public class Level : MonoBehaviour
     {
         public Transform Ground;
+        public Transform FoodContainer;
 
         public Rect GetLevelBounds()
         {

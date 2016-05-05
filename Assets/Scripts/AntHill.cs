@@ -2,9 +2,10 @@
 
 namespace Assets.Scripts
 {
-    public class AntHill : MonoBehaviour
+    public class Anthill : MonoBehaviour
     {
         public int CollectedSugar = 0;
         public int CollectedApples = 0;
+        public Transform AntContainer;
     }
 }

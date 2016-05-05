@@ -200,7 +200,7 @@ namespace Assets.Scripts
                 _nearApples.Add(apple);
                 _antScript.Reach(apple);
             }
-            var anthill = collision.gameObject.GetComponent<AntHill>();
+            var anthill = collision.gameObject.GetComponent<Anthill>();
             if (anthill != null)
             {
                 switch (_carrying)
@@ -234,8 +234,8 @@ namespace Assets.Scripts
                     _antScript.Reach(mark);
                 }
             }
-            var level = collision.gameObject.GetComponentInParent<Level>();
-            if (level != null)
+            var levelBoundary = collision.gameObject.GetComponentInParent<LevelBoundary>();
+            if (levelBoundary != null)
             {
                 _state = State.Idle;
                 Destination = transform.position;

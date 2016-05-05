@@ -17,7 +17,6 @@ namespace Assets.Scripts
         private List<Sugar> _nearSugar;
         private List<Apple> _nearApples;
         private Carrying _carrying;
-        private Apple _carriedApple;
 
         public Vector3 AnthillPosition { get; private set; }
 
@@ -82,7 +81,6 @@ namespace Assets.Scripts
             {
                 return false;
             }
-            _carriedApple = apple;
             apple.AddCarryingAnt(this);
             _carrying = Carrying.Apple;
             return true;
@@ -91,7 +89,6 @@ namespace Assets.Scripts
         public void RemoveCarriedApple()
         {
             _carrying = Carrying.Noting;
-            _carriedApple = null;
             InitDestination(Destination);
         }
 
@@ -206,25 +203,20 @@ namespace Assets.Scripts
                 switch (_carrying)
                 {
                     case Carrying.Noting:
+                        _antScript.Reach(anthill);
                         break;
                     case Carrying.Sugar:
-                        anthill.CollectedSugar++;                       
+                        anthill.CollectedSugar++;
+                        _carrying = Carrying.Noting;
+                        _antScript.Reach(anthill);
                         break;
                     case Carrying.Apple:
-                        if (_carriedApple != null)
-                        {
-                            anthill.CollectedApples++;
-                            _carriedApple.DestroyApple();
-                            _carriedApple = null;
-                        }
                         break;
                     default:
                         throw new NotSupportedException(string.Format(
                             "The carring state '{0}' is not supported.",
                             _carrying));
                 }
-                _carrying = Carrying.Noting;
-                _antScript.Reach(anthill);
             }
             var mark = collision.gameObject.GetComponent<Mark>();
             if (mark != null)

@@ -19,15 +19,6 @@ namespace Assets.Scripts
             _carryingAnts.Add(ant);
         }
 
-        public void DestroyApple()
-        {
-            foreach (var ant in _carryingAnts)
-            {
-                ant.RemoveCarriedApple();
-            }
-            Destroy(gameObject);
-        }
-
         protected virtual void Start()
         {
             _carryingAnts = new List<Ant>();
@@ -57,6 +48,25 @@ namespace Assets.Scripts
                 ant.transform.position += movement;
             }
             transform.position += movement;
+        }
+
+        protected virtual void OnCollisionEnter(Collision collision)
+        {
+            var anthill = collision.gameObject.GetComponent<Anthill>();
+            if (anthill != null)
+            {
+                anthill.CollectedApples++;
+                DestroyApple();
+            }
+        }
+
+        private void DestroyApple()
+        {
+            foreach (var ant in _carryingAnts)
+            {
+                ant.RemoveCarriedApple();
+            }
+            Destroy(gameObject);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Assets.Scripts
     {
         public string AntScriptName { get; set; }
 
-        public string[] AntScripts { get; private set; } 
+        public List<string> AntScripts { get; private set; } 
 
         public float TimeScale { get; set; }
 
@@ -16,7 +17,7 @@ namespace Assets.Scripts
         {
             DontDestroyOnLoad(this);
             var files = Directory.GetFiles(Application.streamingAssetsPath, "*.lua");
-            AntScripts = files.Select(file => new FileInfo(file).Name).ToArray();
+            AntScripts = files.Select(file => new FileInfo(file).Name).ToList();
             AntScriptName = AntScripts.First();
             TimeScale = 1f;
         }

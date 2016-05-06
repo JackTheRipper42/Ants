@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,8 +22,7 @@ namespace Assets.Scripts
 
         public void OptionsClicked()
         {
-            MainMenuPanel.SetActive(false);
-            OptionsMenuPanel.SetActive(true);
+            Show(Menu.Options);
         }
 
         public void ExitClicked()
@@ -31,26 +30,24 @@ namespace Assets.Scripts
             Application.Quit();
         }
 
-        public void ReturnClicked()
+        public void OkButtonClicked()
         {
-            MainMenuPanel.SetActive(true);
-            OptionsMenuPanel.SetActive(false);
+            _parameters.AntScriptName = _parameters.AntScripts[AntScriptNameDropdown.value];
+            Show(Menu.Main);
         }
 
-        public void ScriptSelected(int index)
+        public void CancelButtonClicked()
         {
-            _parameters.AntScriptName = _parameters.AntScripts[index];
+            AntScriptNameDropdown.value = _parameters.AntScripts.IndexOf(_parameters.AntScriptName);
+            Show(Menu.Main);
         }
 
         protected virtual void Start()
         {
             _parameters = FindObjectOfType<Parameters>();
-            MainMenuPanel.SetActive(true);
-            OptionsMenuPanel.SetActive(false);
-            AntScriptNameDropdown.options = _parameters.AntScripts
-                .Select(file => new Dropdown.OptionData(file))
-                .ToList();
-            AntScriptNameDropdown.value = 0;
+            AntScriptNameDropdown.AddOptions(_parameters.AntScripts);
+            AntScriptNameDropdown.value = _parameters.AntScripts.IndexOf(_parameters.AntScriptName);
+            Show(Menu.Main);
         }
 
         private IEnumerator LoadLevel()
@@ -61,6 +58,29 @@ namespace Assets.Scripts
             {
                 yield return new WaitForEndOfFrame();
             }
+        }
+
+        private void Show(Menu menu)
+        {
+            switch (menu)
+            {
+                case Menu.Main:
+                    MainMenuPanel.SetActive(true);
+                    OptionsMenuPanel.SetActive(false);
+                    break;
+                case Menu.Options:
+                    MainMenuPanel.SetActive(false);
+                    OptionsMenuPanel.SetActive(transform);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("menu", menu, null);
+            }
+        }
+
+        private enum Menu
+        {
+            Main,
+            Options
         }
     }
 }

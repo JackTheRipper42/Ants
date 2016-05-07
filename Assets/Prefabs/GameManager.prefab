@@ -55,6 +55,7 @@ MonoBehaviour:
   MarkPrefab: {fileID: 129720, guid: 5597c42504703624ca8c86c149a31aa9, type: 2}
   ApplePrefab: {fileID: 190138, guid: eb356d02a3283d446930a270b23a3923, type: 2}
   SugarPrefab: {fileID: 162468, guid: 353f841e666c312468af9ac236ed1af5, type: 2}
+  BugPrefab: {fileID: 130168, guid: 04df20c90bc45f242a552fbb0537abb0, type: 2}
   LevelScene: level
 --- !u!1001 &100100000
 Prefab:

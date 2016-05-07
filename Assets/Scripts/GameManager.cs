@@ -16,12 +16,14 @@ namespace Assets.Scripts
         public GameObject MarkPrefab;
         public GameObject ApplePrefab;
         public GameObject SugarPrefab;
+        public GameObject BugPrefab;
         public string LevelScene;
 
         private int _antNumber;
         private int _markNumber;
         private int _sugarNumber;
         private int _appleNumber;
+        private int _bugNumber;
         private int _points;
         private Level _level;
         private Parameters _parameters;
@@ -56,14 +58,28 @@ namespace Assets.Scripts
             mark.Initialize(radius, information, creator);
         }
 
-        public void PlayerCollectSugar()
+        public void CollectSugar(Anthill anthill)
         {
-            Points += 1;
+            if (anthill.gameObject.tag == "Player")
+            {
+                Points += 1;
+            }
         }
 
-        public void PlayerCollectApple()
+        public void CollectApple(Anthill anthill)
         {
-            Points += 100;
+            if (anthill.gameObject.tag == "Player")
+            {
+                Points += 100;
+            }
+        }
+
+        public void AntDied(Anthill anthill)
+        {
+            if (anthill.gameObject.tag == "Player")
+            {
+                Points -= 50;
+            }
         }
 
         protected virtual void Start()
@@ -88,7 +104,7 @@ namespace Assets.Scripts
                 obj.transform.rotation = Quaternion.LookRotation(offset);
                 obj.name = string.Format("ant {0}", _antNumber++);
                 var ant = obj.GetComponent<Ant>();
-                ant.Initialize(anthill.transform.position, this, _parameters.AntScriptName);
+                ant.Initialize(anthill, this, _parameters.AntScriptName);
             }
         }
 
@@ -106,6 +122,14 @@ namespace Assets.Scripts
             obj.transform.position = position;
             obj.transform.parent = _level.FoodContainer;
             obj.transform.name = string.Format("sugar {0}", _sugarNumber++);
+        }
+
+        private void SpawnBug(Vector3 position)
+        {
+            var obj = Instantiate(BugPrefab);
+            obj.transform.position = position;
+            obj.transform.parent = _level.BugContainer;
+            obj.transform.name = string.Format("bug {0}", _bugNumber++);
         }
 
         private IEnumerator LoadLevel()
@@ -126,6 +150,7 @@ namespace Assets.Scripts
 
             StartCoroutine(SpawnSugarRoutine());
             StartCoroutine(SpawnApplesRoutine());
+            StartCoroutine(SpawnBugsRoutine());
 
             foreach (var anthill in anthills)
             {
@@ -135,7 +160,7 @@ namespace Assets.Scripts
 
         private IEnumerator SpawnSugarRoutine()
         {
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 Vector3 position;
                 if (TryGetRandomPosition(10, out position))
@@ -157,7 +182,7 @@ namespace Assets.Scripts
 
         private IEnumerator SpawnApplesRoutine()
         {
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 Vector3 position;
                 if (TryGetRandomPosition(10, out position))
@@ -173,6 +198,28 @@ namespace Assets.Scripts
                 if (TryGetRandomPosition(10, out position))
                 {
                     SpawnApple(position);
+                }
+            }
+        }
+
+        private IEnumerator SpawnBugsRoutine()
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                Vector3 position;
+                if (TryGetRandomPosition(10, out position))
+                {
+                    SpawnBug(position);
+                }
+            }
+
+            while (true)
+            {
+                yield return new WaitForSeconds(Random.Range(40, 120));
+                Vector3 position;
+                if (TryGetRandomPosition(10, out position))
+                {
+                    SpawnBug(position);
                 }
             }
         }
@@ -205,8 +252,9 @@ namespace Assets.Scripts
                 var ant = collider.gameObject.GetComponent<Ant>();
                 var sugar = collider.gameObject.GetComponent<Sugar>();
                 var apple = collider.gameObject.GetComponent<Apple>();
+                var bug = collider.gameObject.GetComponent<Bug>();
 
-                if (anthill != null || ant != null || sugar != null || apple != null)
+                if (anthill != null || ant != null || sugar != null || apple != null || bug != null)
                 {
                     return false;
                 }

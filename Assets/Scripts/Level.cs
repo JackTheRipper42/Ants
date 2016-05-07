@@ -6,6 +6,7 @@ namespace Assets.Scripts
     {
         public Transform Ground;
         public Transform FoodContainer;
+        public Transform BugContainer;
 
         public Rect GetLevelBounds()
         {

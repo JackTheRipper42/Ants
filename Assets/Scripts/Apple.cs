@@ -31,6 +31,8 @@ namespace Assets.Scripts
                 return;
             }
 
+            _carryingAnts.RemoveAll(ant => ant == null);
+
             var combinedDestination = new Vector3(0f, 0f, 0f);
             var maxSpeed = float.MaxValue;
             var combindedSpeed = 0f;

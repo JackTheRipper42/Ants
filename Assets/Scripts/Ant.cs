@@ -17,8 +17,12 @@ namespace Assets.Scripts
         private List<Sugar> _nearSugar;
         private List<Apple> _nearApples;
         private Carrying _carrying;
+        private Anthill _anthill;
 
-        public Vector3 AnthillPosition { get; private set; }
+        public Vector3 AnthillPosition
+        {
+            get { return _anthill.transform.position; }
+        }
 
         public float Speed { get { return 5; } }
 
@@ -29,10 +33,15 @@ namespace Assets.Scripts
 
         public Vector3 Destination { get; private set; }
 
-        public void Initialize(Vector3 anthillPosition, GameManager gameManager, string scriptName)
+        public bool Alive
+        {
+            get { return true; }
+        }
+
+        public void Initialize(Anthill anthill, GameManager gameManager, string scriptName)
         {
             _state = State.Idle;
-            AnthillPosition = anthillPosition;
+            _anthill = anthill;
             _gameManager = gameManager;
             _nearSugar = new List<Sugar>();
             _nearApples = new List<Apple>();
@@ -97,8 +106,20 @@ namespace Assets.Scripts
             _gameManager.SpawnMark(this, radius, information);
         }
 
+        public void Kill()
+        {
+            _state = State.Dead;
+            _anthill.AntDied();
+            Destroy(gameObject);
+        }
+
         protected virtual void Update()
         {
+            if (!Alive)
+            {
+                return;
+            }
+
             if (Time.deltaTime > 0f)
             {
 
@@ -143,6 +164,11 @@ namespace Assets.Scripts
 
         protected virtual void OnTriggerEnter(Collider other)
         {
+            if (!Alive)
+            {
+                return;
+            }
+
             if (!other.isTrigger)
             {
                 var ant = other.gameObject.GetComponent<Ant>();
@@ -165,6 +191,11 @@ namespace Assets.Scripts
 
         protected virtual void OnTriggerExit(Collider other)
         {
+            if (!Alive)
+            {
+                return;
+            }
+
             if (!other.isTrigger)
             {
                 var ant = other.gameObject.GetComponent<Ant>();
@@ -187,6 +218,11 @@ namespace Assets.Scripts
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
+            if (!Alive)
+            {
+                return;
+            }
+
             var sugar = collision.gameObject.GetComponent<Sugar>();
             if (sugar != null)
             {
@@ -239,6 +275,11 @@ namespace Assets.Scripts
 
         protected virtual void OnCollisionExit(Collision collision)
         {
+            if (!Alive)
+            {
+                return;
+            }
+
             var sugar = collision.gameObject.GetComponent<Sugar>();
             if (sugar != null)
             {
@@ -267,7 +308,8 @@ namespace Assets.Scripts
         private enum State
         {
             Idle,
-            Walking
+            Walking,
+            Dead
         }
 
         private enum Carrying

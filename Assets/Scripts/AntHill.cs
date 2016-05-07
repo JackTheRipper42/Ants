@@ -10,18 +10,17 @@ namespace Assets.Scripts
 
         public void CollectSugar()
         {
-            if (gameObject.tag == "Player")
-            {
-                _gameManager.PlayerCollectSugar();
-            }
+            _gameManager.CollectSugar(this);
         }
 
         public void CollectApple()
         {
-            if (gameObject.tag == "Player")
-            {
-                _gameManager.PlayerCollectApple();
-            }
+            _gameManager.CollectApple(this);
+        }
+
+        public void AntDied()
+        {
+            _gameManager.AntDied(this);
         }
 
         protected virtual void Start()
